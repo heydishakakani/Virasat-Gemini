@@ -1,4 +1,5 @@
 import { icon } from './icons.js';
+import { LANDING } from './landing.js';
 import { ASSETS, STATUS, GUIDANCE, NOMINEE_NOTE } from './data.js';
 
 /* ---------------------------------------------------------------
@@ -34,6 +35,8 @@ const views = {};
 
 const note = (t) => `<div class="note"><span data-icon="info"></span><span>${t}</span></div>`;
 const privacyBox = (t) => `<div class="privacy"><span data-icon="lock"></span><span>${t}</span></div>`;
+
+views.landing = () => LANDING;
 
 views.login = () => `
 <div class="screen"><div class="wrap">
@@ -210,7 +213,7 @@ function render() {
   let html;
 
   switch (root || '') {
-    case '': return go('/start');
+    case '': html = views.landing(); break;
     case 'login': case 'login-signup': html = views.login(); break;
     case 'start': html = views.start(); break;
     case 'step1': html = views.step1(); break;
@@ -219,14 +222,28 @@ function render() {
     case 'searching': if (!state.submitted) return go('/step3'); html = views.searching(); break;
     case 'results': if (!state.submitted) return go('/start'); html = views.results(); break;
     case 'asset': if (!state.submitted) return go('/start'); html = views.asset(arg); break;
-    default: return go('/start');
+    default: return go('/');
   }
   view.innerHTML = html;
   hydrateIcons(view);
   if (root === 'searching') runSearch();
   window.scrollTo(0, 0); view.focus({ preventScroll: true });
+  if (!root) revealOnScroll();
   $('#nav').classList.remove('open'); $('#menuBtn').setAttribute('aria-expanded', 'false');
   aiChipsRefresh();
+}
+
+function revealOnScroll() {
+  const els = $$('.lp .reveal');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return els.forEach((e) => e.classList.add('in'));
+  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  els.forEach((e) => io.observe(e));
+}
+
+function scrollToId(id) {
+  const go1 = () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!location.hash.replace(/^#/, '').replace(/^\//, '')) return go1();
+  location.hash = '#/'; setTimeout(go1, 60);
 }
 
 function runSearch() {
@@ -292,6 +309,8 @@ document.addEventListener('submit', (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  const sc = e.target.closest('[data-scroll]');
+  if (sc) { e.preventDefault(); $('#nav').classList.remove('open'); return scrollToId(sc.dataset.scroll); }
   const t = e.target.closest('[data-action]'); if (!t) return;
   const act = t.dataset.action;
   if (act === 'goto') return go(t.dataset.to);

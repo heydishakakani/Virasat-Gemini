@@ -39,11 +39,10 @@ test('ID-like numbers are redacted before they reach the model', async () => {
   assert.equal(redact('PAN ABCDE1234F here'), 'PAN [ID removed] here');
   assert.equal(redact('policy 12 years'), 'policy 12 years');
 });
-test('index.html is served and holds no API key', async () => {
+test('the site is served as one page and holds no API key', async () => {
   const html = await (await fetch(base + '/')).text();
-  assert.match(html, /Ask Virasat/);
-  const guided = await (await fetch(base + '/guided.html')).text();
-  assert.match(guided, /Virasat AI/);
-  assert.doesNotMatch(guided, /AIza|GEMINI_API_KEY/);
-  assert.doesNotMatch(html, /AIza|GEMINI_API_KEY/);
+  assert.match(html, /Virasat AI/);
+  const landing = await (await fetch(base + '/js/landing.js')).text();
+  assert.match(landing, /Every asset, checked for a nominee/);
+  for (const body of [html, landing]) assert.doesNotMatch(body, /AIza|GEMINI_API_KEY/);
 });

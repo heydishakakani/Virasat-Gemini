@@ -38,7 +38,8 @@ Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the
 
 ## Where things are
 
-- `public/index.html`: page shell (header, footer, AI panel)
+- `public/index.html`: page shell (header, footer, AI panel). One page: the landing page and the guided flow are both inside it.
+- `public/css/landing.css` and `public/js/landing.js`: the Evernote-style landing page
 - `public/css/app.css`: colours, type and components (change the look here, top of the file)
 - `public/js/app.js`: screens and navigation; `public/js/data.js`: the sample assets
 - `public/media/story.mp4`: add your own video here; the "Watch our story" button plays it
@@ -46,9 +47,4 @@ Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the
 
 ## Open it without a server
 
-`npm run build:standalone` writes `standalone/virasat-landing.html` and `standalone/virasat-guided.html`, single files you can double-click (keep them in the same folder; they link to each other). Every screen works; only the Virasat AI panel needs the server running (`npm start`).
-
-## Two designs
-
-- `/` (`public/index.html`): the Evernote-style landing page, with the Ask Virasat box. Its buttons lead into the guided flow.
-- `/guided.html` (`public/guided.html`): the newer guided flow (login, details, search, results, asset detail, Virasat AI).
+`npm run build:standalone` writes `standalone/virasat.html`: the whole site (landing page and guided flow) as one file you can double-click. Only Virasat AI needs the server running (`npm run dev` or `npm start`).

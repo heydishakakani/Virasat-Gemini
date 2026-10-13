@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Virasat – Asset review</title>
-  <meta name="description" content="Check a loved one's assets and nominee details step by step with Virasat.">
+  <title>Virasat – Every asset, checked for a nominee</title>
+  <meta name="description" content="List what your family member owned. Virasat checks each asset for a nominee and tells you what to do next.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -46,6 +46,7 @@ button, input, select { font: inherit; color: inherit; }
 svg { display: block; max-width: 100%; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 6px; }
+#view:focus, #view:focus-visible { outline: none; }
 .skip { position: absolute; left: -999px; top: 8px; background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px; z-index: 100; }
 .skip:focus { left: 8px; }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
@@ -273,18 +274,129 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 
+/* Landing page (Evernote edition), scoped under .lp so it cannot clash with the app screens. */
+.lp .hero {max-width:760px; margin:40px auto 0; text-align:center; padding:0 24px;}
+.lp .hero h1 {font-size:clamp(2.2rem,5.4vw,3.6rem); line-height:1.08; letter-spacing:-0.01em; margin-bottom:20px;}
+.lp .hero p {font-size:1.08rem; color:var(--ink-soft); line-height:1.6; max-width:52ch; margin:0 auto 32px;}
+.lp .hero-actions {display:flex; flex-direction:column; align-items:center; gap:14px;}
+.lp .btn-primary {display:inline-block; padding:15px 30px; border-radius:999px; border:none; background:var(--ink); color:var(--bg);
+    font-weight:700; font-size:1rem; cursor:pointer; transition:transform .15s ease, background .15s ease, box-shadow .15s ease;}
+.lp .btn-primary:hover {transform:translateY(-2px); background:var(--ink-soft); box-shadow:0 16px 30px -16px rgba(20,20,16,0.45);}
+.lp .btn-primary:active {transform:translateY(0);}
+.lp .hero-actions .alt {font-size:0.9rem; color:var(--ink-soft);}
+.lp .hero-actions .alt a {font-weight:700; color:var(--ink); text-decoration:underline;}
+.lp .shot-wrap {max-width:1000px; margin:56px auto 0; padding:0 24px;}
+.lp .shot {background:var(--surface); border:1px solid var(--line); border-radius:20px 20px 0 0;
+    box-shadow:0 40px 80px -40px rgba(20,20,16,0.35); overflow:hidden;}
+.lp .shot-bar {display:flex; align-items:center; gap:16px; padding:14px 20px; border-bottom:1px solid var(--line); font-size:0.8rem; color:var(--ink-faint);}
+.lp .shot-bar .crumb {display:flex; align-items:center; gap:6px;}
+.lp .shot-bar .sep {opacity:0.5;}
+.lp .shot-body {display:grid; grid-template-columns: 200px 1fr; min-height:340px;}
+.lp .shot-side {border-right:1px solid var(--line); padding:20px 16px; display:flex; flex-direction:column; gap:6px;}
+.lp .shot-side .si {display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; font-size:0.84rem; color:var(--ink-soft);}
+.lp .shot-side .si.active {background:var(--chip); color:var(--ink); font-weight:600;}
+.lp .shot-main {padding:28px 32px;}
+.lp .shot-main h3 {font-size:1.3rem; margin-bottom:18px;}
+.lp .asset-row {display:flex; align-items:center; justify-content:space-between; padding:13px 16px;
+    border:1px solid var(--line); border-radius:12px; margin-bottom:10px; font-size:0.88rem;
+    transition:border-color .15s ease, background .15s ease, transform .15s ease;}
+.lp .asset-row:hover {border-color:var(--green); background:var(--chip); transform:translateX(3px);}
+.lp .shot-side .si {cursor:pointer; transition:background .15s ease, color .15s ease;}
+.lp .shot-side .si:hover {background:var(--chip); color:var(--ink);}
+.lp .asset-row .name {display:flex; align-items:center; gap:10px; font-weight:600;}
+.lp .asset-row .icon {width:30px; height:30px; border-radius:8px; background:var(--chip); display:flex; align-items:center; justify-content:center; font-size:0.9rem;}
+.lp .status {padding:5px 12px; border-radius:999px; font-size:0.76rem; font-weight:700;}
+.lp .status.yes {background:var(--green-soft); color:var(--green-deep);}
+.lp .status.no {background:#fbe3e1; color:#a3352d;}
+.lp .status.unknown {background:var(--chip); color:var(--ink-faint);}
+@media (max-width:720px) {
+.lp .shot-body {grid-template-columns:1fr;}
+.lp .shot-side {display:none;}
+}
+.lp .strip {max-width:1000px; margin:70px auto; padding:0 24px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:30px; text-align:center;}
+.lp .strip .si-item {display:flex; flex-direction:column; align-items:center; gap:10px;}
+.lp .strip .si-icon {width:52px; height:52px; border-radius:14px; background:var(--green-soft); color:var(--green-deep);
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    transition:transform .2s ease, background .2s ease;}
+.lp .strip .si-item:hover .si-icon {transform:scale(1.1) rotate(-4deg); background:var(--green); color:#fff;}
+.lp .strip .si-item span {font-size:0.86rem; font-weight:600; color:var(--ink-soft);}
+@media (max-width:760px) {
+.lp .strip {grid-template-columns:repeat(2,1fr);}
+}
+.lp .feat-row {max-width:1080px; margin:0 auto 100px; padding:0 24px;
+    display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+.lp .feat-row.rev {direction:rtl;}
+.lp .feat-row.rev > * {direction:ltr;}
+.lp .feat-copy .tag {display:inline-block; font-size:0.74rem; font-weight:700; color:var(--green-deep);
+    background:var(--green-soft); padding:5px 12px; border-radius:999px; margin-bottom:16px;}
+.lp .feat-copy h2 {font-size:clamp(1.5rem,3vw,2.1rem); margin-bottom:16px; line-height:1.2;}
+.lp .feat-copy p {font-size:1rem; color:var(--ink-soft); line-height:1.65;}
+.lp .feat-visual {background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:26px;
+    box-shadow:0 30px 60px -36px rgba(20,20,16,0.3);}
+.lp .fv-title {font-size:0.8rem; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:14px;}
+.lp .fv-item {display:flex; align-items:center; justify-content:space-between; padding:11px 14px; border-radius:10px; background:var(--chip); margin-bottom:8px; font-size:0.86rem; font-weight:600;}
+.lp .fv-item .sdot {width:8px; height:8px; border-radius:50%;}
+.lp .fv-item.yes .sdot {background:var(--green);}
+.lp .fv-item.no .sdot {background:#c65b52;}
+.lp .fv-item.unknown .sdot {background:#c9a24a;}
+.lp .lock-visual {display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 0;}
+.lp .lock-visual .lock-icon {width:64px; height:64px; border-radius:50%; background:var(--green-soft); color:var(--green-deep);
+    display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:16px;}
+.lp .lock-visual p {font-size:0.86rem; color:var(--ink-soft); max-width:26ch;}
+@media (max-width:820px) {
+.lp .feat-row, .lp .feat-row.rev {grid-template-columns:1fr; direction:ltr;}
+}
+.lp .grid3 {max-width:1080px; margin:0 auto 100px; padding:0 24px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+.lp .grid3 .card {background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:26px;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;}
+.lp .grid3 .card:hover {transform:translateY(-6px); border-color:transparent; box-shadow:0 30px 50px -30px rgba(20,20,16,0.35);}
+.lp .grid3 .card .ic {width:44px; height:44px; border-radius:12px; background:var(--green-soft); color:var(--green-deep);
+    display:flex; align-items:center; justify-content:center; font-size:1.15rem; margin-bottom:16px;
+    transition:transform .2s ease;}
+.lp .grid3 .card:hover .ic {transform:scale(1.12);}
+.lp .grid3 .card h3 {font-size:1.02rem; margin-bottom:8px;}
+.lp .grid3 .card p {font-size:0.87rem; color:var(--ink-soft); line-height:1.6; margin:0;}
+@media (max-width:820px) {
+.lp .grid3 {grid-template-columns:1fr; max-width:440px;}
+}
+.lp .faq {max-width:760px; margin:0 auto 100px; padding:0 24px;}
+.lp .faq h2 {text-align:center; font-size:clamp(1.5rem,3vw,2rem); margin-bottom:36px;}
+.lp .faq details {border-bottom:1px solid var(--line); padding:18px 0;}
+.lp .faq summary {list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:0.96rem; transition:color .15s ease;}
+.lp .faq summary::-webkit-details-marker {display:none;}
+.lp .faq summary:hover {color:var(--green-deep);}
+.lp .faq .plus {font-size:1.3rem; color:var(--ink-faint); display:inline-block; transition:transform .2s ease, color .2s ease;}
+.lp .faq details[open] .plus {transform:rotate(45deg); color:var(--green);}
+.lp .faq details p {animation:faqIn .2s ease;}
+@keyframes faqIn { from{ opacity:0; transform:translateY(-4px); } to{ opacity:1; transform:translateY(0); } }
+.lp .faq p {margin:12px 0 0; color:var(--ink-soft); font-size:0.88rem; line-height:1.6;}
+.lp .cta-band {max-width:1080px; margin:0 auto 90px; padding:70px 24px; text-align:center;
+    background:var(--ink); color:var(--bg); border-radius:28px;}
+.lp .cta-band h2 {color:var(--bg); font-size:clamp(1.6rem,3.4vw,2.3rem); margin-bottom:14px;}
+.lp .cta-band p {color:rgba(246,243,234,0.68); margin-bottom:30px; font-size:1rem;}
+.lp .cta-band .btn-primary {background:var(--bg); color:var(--ink);}
+.lp .cta-band .btn-primary:hover {background:#fff;}
+.lp .reveal {opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease;}
+.lp .reveal.in {opacity:1; transform:translateY(0);}
+@media (prefers-reduced-motion: reduce) {
+.lp .reveal {opacity:1; transform:none; transition:none;}
+}
+
 </style>
+  
 </head>
 <body>
   <a class="skip" href="#view">Skip to content</a>
 
   <header class="site-header" id="siteHeader">
     <div class="wrap">
-      <a class="brand" href="virasat-landing.html" aria-label="Virasat home"><span class="mark">&#128220;</span>Virasat</a>
+      <a class="brand" href="#/" aria-label="Virasat home"><span class="mark">&#128220;</span>Virasat</a>
       <nav class="nav" id="nav" aria-label="Main">
-        <a href="virasat-landing.html#features">Explore</a>
-        <a href="virasat-landing.html#screenshot">Product</a>
-        <a href="virasat-landing.html#faq">FAQ</a>
+        <a href="#/" data-scroll="features">Explore</a>
+        <a href="#/" data-scroll="screenshot">Product</a>
+        <a href="#/" data-scroll="faq">FAQ</a>
       </nav>
       <div class="header-actions">
         <a class="login hide-sm" href="#/login">Log in</a>
@@ -299,7 +411,7 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
   <footer class="site-footer">
     <div class="wrap">
       <span>&copy; 2026 Virasat. Guidance only, not legal or financial advice.</span>
-      <nav aria-label="Footer"><a href="virasat-landing.html#screenshot">Product</a><a href="virasat-landing.html#features">Features</a><a href="virasat-landing.html#faq">FAQ</a></nav>
+      <nav aria-label="Footer"><a href="#/" data-scroll="screenshot">Product</a><a href="#/" data-scroll="features">Features</a><a href="#/" data-scroll="faq">FAQ</a></nav>
     </div>
   </footer>
 
@@ -350,6 +462,130 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
     folder: s('<path d="M3 7a2 2 0 0 1 2-2h4l2 2.500h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>')
   };
   var icon = (n) => ICONS[n] || "";
+
+  // public/js/landing.js
+  var LANDING = `<div class="lp">
+<section class="hero">
+  <h1>Every asset, checked for a nominee</h1>
+  <p>List what your family member owned. Virasat routes each asset through a nominee check and tells you exactly what to do next.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="#/start">Start asset review</a>
+    <div class="alt">Already reviewing? <a href="#/login">Log in</a></div>
+  </div>
+</section>
+
+<div class="shot-wrap reveal" id="screenshot">
+  <div class="shot">
+    <div class="shot-bar">
+      <div class="crumb">&#128220; Family assets</div>
+      <span class="sep">/</span>
+      <div class="crumb">Nominee review</div>
+    </div>
+    <div class="shot-body">
+      <div class="shot-side">
+        <div class="si active">&#128220; All assets</div>
+        <div class="si">&#9989; Nominee set</div>
+        <div class="si">&#10060; Missing nominee</div>
+        <div class="si">&#10067; Unknown</div>
+        <div class="si">&#128274; Privacy</div>
+      </div>
+      <div class="shot-main">
+        <h3>Family assets \xB7 5 listed</h3>
+        <div class="asset-row"><div class="name"><span class="icon">&#127974;</span>Bank account \u2014 HDFC savings</div><span class="status yes">Nominee set</span></div>
+        <div class="asset-row"><div class="name"><span class="icon">&#128200;</span>Mutual fund \u2014 SBI Bluechip</div><span class="status no">Missing nominee</span></div>
+        <div class="asset-row"><div class="name"><span class="icon">&#128737;&#65039;</span>Insurance \u2014 LIC policy</div><span class="status yes">Nominee set</span></div>
+        <div class="asset-row"><div class="name"><span class="icon">&#127968;</span>Property \u2014 Family home</div><span class="status unknown">Unknown</span></div>
+        <div class="asset-row"><div class="name"><span class="icon">&#128188;</span>Provident fund</div><span class="status yes">Nominee set</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="strip reveal">
+  <div class="si-item"><div class="si-icon">&#128220;</div><span>One list, every asset</span></div>
+  <div class="si-item"><div class="si-icon">&#9989;</div><span>Plain yes / no / unknown</span></div>
+  <div class="si-item"><div class="si-icon">&#128274;</div><span>Private by default</span></div>
+  <div class="si-item"><div class="si-icon">&#9200;</div><span>Ten minutes to start</span></div>
+</div>
+
+<div id="features">
+  <div class="feat-row reveal">
+    <div class="feat-copy">
+      <span class="tag">Clarity</span>
+      <h2>Nominee status, made clear</h2>
+      <p>Every asset you add gets a plain yes, no, or unknown, so you know at a glance what's straightforward and what needs more paperwork. No more digging through statements to find out.</p>
+    </div>
+    <div class="feat-visual">
+      <div class="fv-title">Nominee status</div>
+      <div class="fv-item yes"><span>Bank account</span><span class="sdot"></span></div>
+      <div class="fv-item no"><span>Mutual fund</span><span class="sdot"></span></div>
+      <div class="fv-item unknown"><span>Property</span><span class="sdot"></span></div>
+      <div class="fv-item yes"><span>Insurance</span><span class="sdot"></span></div>
+    </div>
+  </div>
+
+  <div class="feat-row rev reveal">
+    <div class="feat-copy">
+      <span class="tag">Privacy</span>
+      <h2>Private by default</h2>
+      <p>Nothing you enter here is submitted to a bank, registrar, or government body. It stays yours until you choose to act on it \u2014 Virasat is a private worksheet, not a filing system.</p>
+    </div>
+    <div class="feat-visual lock-visual">
+      <div class="lock-icon">&#128274;</div>
+      <p>Your family's records stay on your list, not on a server anyone else can query.</p>
+    </div>
+  </div>
+</div>
+
+<div class="grid3 reveal">
+  <div class="card">
+    <div class="ic">&#128220;</div>
+    <h3>One list, every asset</h3>
+    <p>Bank accounts, mutual funds, insurance, property. Add them all in one place instead of piecing it together across institutions.</p>
+  </div>
+  <div class="card">
+    <div class="ic">&#9989;</div>
+    <h3>Nominee status, made clear</h3>
+    <p>A plain yes, no, or unknown for every asset \u2014 so you know exactly where more paperwork is needed.</p>
+  </div>
+  <div class="card">
+    <div class="ic">&#128274;</div>
+    <h3>Private by default</h3>
+    <p>Nothing is submitted anywhere automatically. It stays yours until you decide to act on it.</p>
+  </div>
+</div>
+
+<div class="faq reveal" id="faq">
+  <h2>Questions you might have</h2>
+  <details open>
+    <summary>Is my family's financial data sent anywhere?<span class="plus">+</span></summary>
+    <p>Virasat never submits what you enter to a bank, registrar, insurer, or government body. The one exception is the optional Virasat AI help panel: when you use it, your question and the names of your listed assets are sent to Google&rsquo;s Gemini to write an answer, with ID and account-style numbers removed first.</p>
+  </details>
+  <details>
+    <summary>What kinds of assets can I add?<span class="plus">+</span></summary>
+    <p>Bank accounts, mutual funds, insurance policies, property, and other holdings \u2014 anything a family member owned that now needs a nominee check.</p>
+  </details>
+  <details>
+    <summary>What does a "nominee check" actually tell me?<span class="plus">+</span></summary>
+    <p>For each asset, Virasat gives a plain yes, no, or unknown for whether a nominee is on file, so you immediately see what's straightforward and what needs follow-up paperwork.</p>
+  </details>
+  <details>
+    <summary>How long does it take to set up?<span class="plus">+</span></summary>
+    <p>Most families list their first few assets in under ten minutes. You can add more as you find them \u2014 there's no need to have everything at once.</p>
+  </details>
+  <details>
+    <summary>Do I need an account to try it?<span class="plus">+</span></summary>
+    <p>You can start an asset review right away. Creating an account just lets you save your progress and come back to it later.</p>
+  </details>
+</div>
+
+<div class="cta-band reveal">
+  <h2>Start sorting out the estate</h2>
+  <p>List the first asset in under two minutes \u2014 no account required to begin.</p>
+  <a class="btn-primary" href="#/start">Start asset review</a>
+</div>
+
+</div>`;
 
   // public/js/data.js
   var STATUS = {
@@ -504,6 +740,7 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
   var views = {};
   var note = (t) => `<div class="note"><span data-icon="info"></span><span>${t}</span></div>`;
   var privacyBox = (t) => `<div class="privacy"><span data-icon="lock"></span><span>${t}</span></div>`;
+  views.landing = () => LANDING;
   views.login = () => `
 <div class="screen"><div class="wrap">
   <div class="card auth">
@@ -666,7 +903,8 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
     let html;
     switch (root || "") {
       case "":
-        return go("/start");
+        html = views.landing();
+        break;
       case "login":
       case "login-signup":
         html = views.login();
@@ -699,16 +937,34 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
         html = views.asset(arg);
         break;
       default:
-        return go("/start");
+        return go("/");
     }
     view.innerHTML = html;
     hydrateIcons(view);
     if (root === "searching") runSearch();
     window.scrollTo(0, 0);
     view.focus({ preventScroll: true });
+    if (!root) revealOnScroll();
     $("#nav").classList.remove("open");
     $("#menuBtn").setAttribute("aria-expanded", "false");
     aiChipsRefresh();
+  }
+  function revealOnScroll() {
+    const els = $$(".lp .reveal");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return els.forEach((e) => e.classList.add("in"));
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (en.isIntersecting) {
+        en.target.classList.add("in");
+        io.unobserve(en.target);
+      }
+    }), { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+    els.forEach((e) => io.observe(e));
+  }
+  function scrollToId(id) {
+    const go1 = () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!location.hash.replace(/^#/, "").replace(/^\//, "")) return go1();
+    location.hash = "#/";
+    setTimeout(go1, 60);
   }
   function runSearch() {
     const items = $$("#checklist li");
@@ -802,6 +1058,12 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
     }
   });
   document.addEventListener("click", (e) => {
+    const sc = e.target.closest("[data-scroll]");
+    if (sc) {
+      e.preventDefault();
+      $("#nav").classList.remove("open");
+      return scrollToId(sc.dataset.scroll);
+    }
     const t = e.target.closest("[data-action]");
     if (!t) return;
     const act = t.dataset.action;
