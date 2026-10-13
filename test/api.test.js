@@ -41,6 +41,9 @@ test('ID-like numbers are redacted before they reach the model', async () => {
 });
 test('index.html is served and holds no API key', async () => {
   const html = await (await fetch(base + '/')).text();
-  assert.match(html, /Virasat AI/);
+  assert.match(html, /Ask Virasat/);
+  const guided = await (await fetch(base + '/guided.html')).text();
+  assert.match(guided, /Virasat AI/);
+  assert.doesNotMatch(guided, /AIza|GEMINI_API_KEY/);
   assert.doesNotMatch(html, /AIza|GEMINI_API_KEY/);
 });
