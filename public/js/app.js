@@ -210,7 +210,7 @@ function render() {
   let html;
 
   switch (root || '') {
-    case '': return location.replace('/');            // the landing page lives at "/"
+    case '': return go('/start');
     case 'login': case 'login-signup': html = views.login(); break;
     case 'start': html = views.start(); break;
     case 'step1': html = views.step1(); break;

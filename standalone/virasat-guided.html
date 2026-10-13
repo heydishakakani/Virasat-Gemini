@@ -280,11 +280,11 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
 
   <header class="site-header" id="siteHeader">
     <div class="wrap">
-      <a class="brand" href="/" aria-label="Virasat home"><span class="mark">&#128220;</span>Virasat</a>
+      <a class="brand" href="virasat-landing.html" aria-label="Virasat home"><span class="mark">&#128220;</span>Virasat</a>
       <nav class="nav" id="nav" aria-label="Main">
-        <a href="/#features">Explore</a>
-        <a href="/#screenshot">Product</a>
-        <a href="/#faq">FAQ</a>
+        <a href="virasat-landing.html#features">Explore</a>
+        <a href="virasat-landing.html#screenshot">Product</a>
+        <a href="virasat-landing.html#faq">FAQ</a>
       </nav>
       <div class="header-actions">
         <a class="login hide-sm" href="#/login">Log in</a>
@@ -299,7 +299,7 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
   <footer class="site-footer">
     <div class="wrap">
       <span>&copy; 2026 Virasat. Guidance only, not legal or financial advice.</span>
-      <nav aria-label="Footer"><a href="/#screenshot">Product</a><a href="/#features">Features</a><a href="/#faq">FAQ</a></nav>
+      <nav aria-label="Footer"><a href="virasat-landing.html#screenshot">Product</a><a href="virasat-landing.html#features">Features</a><a href="virasat-landing.html#faq">FAQ</a></nav>
     </div>
   </footer>
 
@@ -666,8 +666,7 @@ dialog.video video { width: 100%; border-radius: 12px; background: #000; }
     let html;
     switch (root || "") {
       case "":
-        return location.replace("/");
-      // the landing page lives at "/"
+        return go("/start");
       case "login":
       case "login-signup":
         html = views.login();

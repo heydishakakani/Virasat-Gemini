@@ -46,7 +46,7 @@ Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the
 
 ## Open it without a server
 
-`npm run build:standalone` writes `standalone/virasat-guided.html`, one file you can double-click. Every screen works; only the Virasat AI panel needs the server running (`npm start`).
+`npm run build:standalone` writes `standalone/virasat-landing.html` and `standalone/virasat-guided.html`, single files you can double-click (keep them in the same folder; they link to each other). Every screen works; only the Virasat AI panel needs the server running (`npm start`).
 
 ## Two designs
 
