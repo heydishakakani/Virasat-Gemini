@@ -1,6 +1,6 @@
 /* Virasat guided flow, Evernote edition.
    Same tokens, type and components as the landing page at "/":
-   cream paper, white cards, a single green, Poppins headings, dark pill buttons. */
+   cream paper, white cards, a single green, Fraunces headings, dark pill buttons. */
 
 :root {
   --bg: #f6f3ea; --surface: #ffffff; --line: #e6e1d3;
@@ -9,7 +9,9 @@
   --chip: #efece0;
   --red: #a3352d; --red-soft: #fbe3e1; --amber: #c9a24a;
   --shadow: 0 30px 60px -36px rgba(20, 20, 16, .3);
-  --heading: "Poppins", system-ui, sans-serif;
+  /* To change the heading font: edit these two lines and the Google Fonts link in index.html. */
+  --heading: "Fraunces", Georgia, "Times New Roman", serif;
+  --hw: 600;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --gutter: clamp(16px, 4vw, 40px);
   --max: 1160px;
@@ -28,7 +30,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
-h1, h2, h3 { font-family: var(--heading); font-weight: 700; letter-spacing: -.01em; line-height: 1.15; margin: 0; }
+h1, h2, h3 { font-family: var(--heading); font-weight: var(--hw); letter-spacing: -.015em; line-height: 1.12; margin: 0; text-wrap: balance; }
 p { margin: 0; }
 a { color: inherit; text-decoration: none; }
 button, input, select { font: inherit; color: inherit; }
@@ -44,7 +46,7 @@ svg { display: block; max-width: 100%; }
 .site-header { position: sticky; top: 0; z-index: 40; background: var(--bg); border-bottom: 1px solid transparent; transition: border-color .25s, box-shadow .25s; }
 .site-header.scrolled { border-color: var(--line); box-shadow: 0 8px 24px -18px rgba(20, 20, 16, .3); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; padding-bottom: 18px; }
-.brand { display: flex; align-items: center; gap: 8px; font-family: var(--heading); font-weight: 800; font-size: 1.15rem; }
+.brand { display: flex; align-items: center; gap: 8px; font-family: var(--heading); font-weight: var(--hw); font-size: 1.3rem; }
 .brand .mark { width: 26px; height: 26px; border-radius: 7px; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: .85rem; color: #fff; }
 .nav { display: flex; align-items: center; gap: 30px; }
 .nav a { font-size: .9rem; font-weight: 500; color: var(--ink-soft); transition: color .15s; }
@@ -122,7 +124,7 @@ svg { display: block; max-width: 100%; }
 
 .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
 .kpi { background: var(--chip); border-radius: 12px; padding: 14px 16px; }
-.kpi .n { font-family: var(--heading); font-weight: 700; font-size: 1.7rem; line-height: 1; }
+.kpi .n { font-family: var(--heading); font-weight: var(--hw); font-size: 1.7rem; line-height: 1; }
 .kpi .t { font-size: .78rem; color: var(--ink-soft); margin-top: 6px; }
 .kpi.no .n { color: var(--red); } .kpi.yes .n { color: var(--green-deep); }
 @media (max-width: 560px) { .kpis { grid-template-columns: 1fr 1fr; } }
@@ -200,7 +202,7 @@ svg { display: block; max-width: 100%; }
 .auth-form .sub { color: var(--ink-soft); margin-top: 6px; font-size: .92rem; }
 .auth-art { background: var(--green-soft); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 34px; gap: 14px; }
 .auth-art .lock { width: 64px; height: 64px; border-radius: 50%; background: var(--surface); color: var(--green-deep); display: grid; place-items: center; font-size: 1.6rem; }
-.auth-art p { font-family: var(--heading); font-weight: 700; font-size: 1.15rem; line-height: 1.3; max-width: 16ch; color: var(--green-deep); }
+.auth-art p { font-family: var(--heading); font-weight: var(--hw); font-size: 1.25rem; line-height: 1.3; max-width: 16ch; color: var(--green-deep); }
 .auth-art small { color: var(--ink-soft); font-size: .84rem; max-width: 26ch; }
 @media (max-width: 760px) { .auth { grid-template-columns: 1fr; } .auth-art { display: none; } }
 .divider { display: flex; align-items: center; gap: 12px; color: var(--ink-faint); font-size: .8rem; margin: 20px 0; }
