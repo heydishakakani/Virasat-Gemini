@@ -46,4 +46,9 @@ Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the
 
 ## Open it without a server
 
-`npm run build:standalone` writes `standalone/virasat.html`, one file you can double-click. Every screen works; only the Virasat AI panel needs the server running (`npm start`).
+`npm run build:standalone` writes `standalone/virasat-guided.html`, one file you can double-click. Every screen works; only the Virasat AI panel needs the server running (`npm start`).
+
+## Two designs
+
+- `/` (`public/index.html`): the Evernote-style landing page, with the Ask Virasat box. Its buttons lead into the guided flow.
+- `/guided.html` (`public/guided.html`): the newer guided flow (login, details, search, results, asset detail, Virasat AI).
