@@ -75,6 +75,11 @@ async function askGemini(prompt) {
   return text.trim();
 }
 
+// Defence in depth: the browser already strips long numbers, but never trust the client.
+const NUM_RE = /(?<!\d)\d(?:[\s-]?\d){7,}(?!\d)/g;   // 8+ digits, even if spaced (Aadhaar, phone, account)
+const PAN_RE = /\b[A-Z]{5}\d{4}[A-Z]\b/gi;
+export const redact = (t) => String(t).replace(NUM_RE, '[number removed]').replace(PAN_RE, '[ID removed]');
+
 function buildPrompt(question, assets) {
   let p = `Question: ${question}`;
   if (assets.length) {
@@ -94,11 +99,11 @@ app.get('/api/usage', (_req, res) => {
 });
 
 app.post('/api/ask', async (req, res) => {
-  const question = String(req.body?.question || '').trim();
+  const question = redact(String(req.body?.question || '').trim());
   const rawAssets = Array.isArray(req.body?.assets) ? req.body.assets.slice(0, MAX_ASSETS) : [];
   const assets = rawAssets
     .map(a => ({
-      name: String(a?.name || '').slice(0, 60),
+      name: redact(String(a?.name || '').slice(0, 60)),
       nominee: ['yes', 'no', 'unknown'].includes(a?.nominee) ? a.nominee : 'unknown'
     }))
     .filter(a => a.name);

@@ -33,8 +33,14 @@ test('valid question returns a mock answer', async () => {
   assert.equal(r.status, 200);
   assert.match((await r.json()).answer, /mock mode/);
 });
+test('ID-like numbers are redacted before they reach the model', async () => {
+  const { redact } = await import('../server.js');
+  assert.equal(redact('my aadhaar is 1234 5678 9012 ok'), 'my aadhaar is [number removed] ok');
+  assert.equal(redact('PAN ABCDE1234F here'), 'PAN [ID removed] here');
+  assert.equal(redact('policy 12 years'), 'policy 12 years');
+});
 test('index.html is served and holds no API key', async () => {
   const html = await (await fetch(base + '/')).text();
-  assert.match(html, /Ask Virasat/);
+  assert.match(html, /Virasat AI/);
   assert.doesNotMatch(html, /AIza|GEMINI_API_KEY/);
 });

@@ -1,6 +1,7 @@
 # Virasat (Gemini edition)
 
-Virasat landing page plus an **Ask Virasat** box powered by the Gemini API.
+Virasat prototype: landing page, a three-step search flow, results and asset detail, plus **Virasat AI**, a help panel powered by the Gemini API.
+All search results are sample data until a real search service exists.
 The browser never sees your API key: it calls `POST /api/ask` on the local
 Express server, and the server calls Gemini using the key from `.env`.
 
@@ -34,3 +35,11 @@ Open http://localhost:3000.
 
 Using Ask Virasat sends the question and the *names* of listed assets to Google Gemini.
 Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the same.
+
+## Where things are
+
+- `public/index.html`: page shell (header, footer, AI panel)
+- `public/css/app.css`: colours, type and components (change the look here, top of the file)
+- `public/js/app.js`: screens and navigation; `public/js/data.js`: the sample assets
+- `public/media/story.mp4`: add your own video here; the "Watch our story" button plays it
+- `server.js`: Gemini proxy with the daily cap, answer cache and number redaction
