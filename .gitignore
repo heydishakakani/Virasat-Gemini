@@ -1,0 +1,11 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# local state (usage counter + cached answers)
+.cache/
+
+node_modules/
+.DS_Store
+*.log
