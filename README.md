@@ -43,3 +43,7 @@ Never type account numbers, PAN or Aadhaar into it. The FAQ on the page says the
 - `public/js/app.js`: screens and navigation; `public/js/data.js`: the sample assets
 - `public/media/story.mp4`: add your own video here; the "Watch our story" button plays it
 - `server.js`: Gemini proxy with the daily cap, answer cache and number redaction
+
+## Open it without a server
+
+`npm run build:standalone` writes `standalone/virasat.html`, one file you can double-click. Every screen works; only the Virasat AI panel needs the server running (`npm start`).

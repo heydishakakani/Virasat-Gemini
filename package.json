@@ -8,11 +8,17 @@
   "scripts": {
     "start": "node server.js",
     "dev": "MOCK_GEMINI=true node server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "build:standalone": "node scripts/build-standalone.mjs"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }
