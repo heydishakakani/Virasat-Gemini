@@ -1,0 +1,40 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+
+// Tests run in mock mode so they never spend Gemini quota.
+process.env.MOCK_GEMINI = 'true';
+process.env.GEMINI_API_KEY = 'test-key-not-real';
+const { default: app } = await import('../server.js');
+
+let server, base;
+test.before(async () => {
+  await new Promise(r => { server = app.listen(0, r); });
+  base = `http://127.0.0.1:${server.address().port}`;
+});
+test.after(() => server.close());
+
+const post = (body) => fetch(base + '/api/ask', {
+  method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+});
+
+test('usage endpoint reports limit and mock flag', async () => {
+  const u = await (await fetch(base + '/api/usage')).json();
+  assert.equal(u.mock, true);
+  assert.ok(u.limit > 0);
+});
+test('empty question is rejected', async () => {
+  assert.equal((await post({ question: '   ' })).status, 400);
+});
+test('overlong question is rejected', async () => {
+  assert.equal((await post({ question: 'x'.repeat(601) })).status, 400);
+});
+test('valid question returns a mock answer', async () => {
+  const r = await post({ question: 'What is a nominee?', assets: [{ name: 'HDFC savings', nominee: 'yes' }] });
+  assert.equal(r.status, 200);
+  assert.match((await r.json()).answer, /mock mode/);
+});
+test('index.html is served and holds no API key', async () => {
+  const html = await (await fetch(base + '/')).text();
+  assert.match(html, /Ask Virasat/);
+  assert.doesNotMatch(html, /AIza|GEMINI_API_KEY/);
+});

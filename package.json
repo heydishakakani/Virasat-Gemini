@@ -1,0 +1,18 @@
+{
+  "name": "virasat-gemini",
+  "version": "0.1.0",
+  "description": "Virasat landing page with a Gemini-powered estate assistant (key kept server-side in .env)",
+  "private": true,
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "MOCK_GEMINI=true node server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
